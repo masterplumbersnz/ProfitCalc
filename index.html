@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master Plumbers NZ Pricing Calculator</title>
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #d1d5db;
+            --brand: #0f172a;
+            --brand-soft: #e2e8f0;
+            --brand-accent: #1d4ed8;
+            --good-bg: #dcfce7;
+            --good-text: #166534;
+            --warn-bg: #fef3c7;
+            --warn-text: #92400e;
+            --bad-bg: #fee2e2;
+            --bad-text: #991b1b;
+            --blue-bg: #dbeafe;
+            --blue-text: #1d4ed8;
+            --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 24px;
+        }
+
+        .wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: white;
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .brand-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .brand-badge {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.15);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 12px 0 10px;
+            font-size: 34px;
+            line-height: 1.15;
+        }
+
+        h2 {
+            margin: 0 0 14px;
+            font-size: 24px;
+        }
+
+        h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .hero p {
+            max-width: 850px;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .script {
+            display: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .tab-btn {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--brand);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: var(--brand);
+            color: white;
+            border-color: var(--brand);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .step {
+            display: flex;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--blue-text);
+            background: var(--blue-bg);
+            padding: 6px 10px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+        }
+
+        .grid-2,
+        .grid-3,
+        .grid-4 {
+            display: grid;
+            gap: 16px;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .field {
+            display: flexbox;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .help {
+            font-size: 12px;
+            color: var(--muted);
+            margin-left: 2px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            background: #fff;
+            margin-top: 5px;
+            margin-bottom: 7px;
+        }
+
+        input[readonly] {
+            background: #f8fafc;
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid #bfdbfe;
+            border-color: #60a5fa;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        button.action {
+            border: none;
+            background: var(--brand);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button.action.secondary {
+            background: var(--brand-soft);
+            color: var(--brand);
+        }
+
+        .result-box {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            background: #fafafa;
+        }
+
+        .result-label {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .result-value {
+            font-size: 30px;
+            font-weight: 700;
+            vertical-align: bottom;
+            align-self: bottom; 
+        }
+
+        .status {
+            margin-top: 16px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .good {
+            background: var(--good-bg);
+            color: var(--good-text);
+        }
+
+        .warn {
+            background: var(--warn-bg);
+            color: var(--warn-text);
+        }
+
+        .bad {
+            background: var(--bad-bg);
+            color: var(--bad-text);
+        }
+
+        .progress-wrap {
+            margin-top: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 28px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .cost-bar,
+        .gp-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .cost-bar {
+            background: #cbd5e1;
+            color: #0f172a;
+        }
+
+        .gp-bar {
+            background: #86efac;
+            color: #14532d;
+        }
+
+        .info-box {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            background: #f8fafc;
+            height: 100%;
+        }
+
+        details {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            background: #fff;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            border-top: 1px solid var(--border);
+            padding: 12px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        .small {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .formula {
+            font-family: "Courier New", monospace;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .training-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 16px;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 980px) {
+
+            .grid-2,
+            .grid-3,
+            .grid-4,
+            .training-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-value {
+                font-size: 24px;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+
+            .tabs,
+            .actions {
+                display: none;
+            }
+
+            .card,
+            .hero {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="hero">
+            <div class="brand-row">
+                <div>
+                    <div class="brand-badge">Master Plumbers NZ</div>
+                    <h1>Pricing Calculator and Training Tool</h1>
+                    <p>
+                        Use this to work out what to charge, check whether a quote hits your target gross profit,
+                        and help members understand the difference between gross profit, margin and markup.
+                    </p>
+                </div>
+                <div class="small" style="color: rgba(255,255,255,0.85); max-width: 260px;">
+                    Best used with ex GST costs and pricing. GST should usually be added after the sell price is worked
+                    out.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="price-tab">Price a Job</button>
+                <button class="tab-btn" data-tab="check-tab">Check a Quote</button>
+                <button class="tab-btn" data-tab="learn-tab">Learn the Difference</button>
+            </div>
+
+            <div id="price-tab" class="tab-panel active">
+                <div class="step">Step 1</div>
+                <h2>Enter your job costs and target</h2>
+                <div class="grid-4">
+                    <div class="field">
+                        <label for="labourCost">Your labour cost ($)</label>
+                        <input id="labourCost" type="number" min="0" step="0.01" value="400" />
+                        <div class="help">Your true labour cost for the job, not what you want to charge.</div>
+                    </div>
+                    <div class="field">
+                        <label for="materialCost">Your material cost ($)</label>
+                        <input id="materialCost" type="number" min="0" step="0.01" value="250" />
+                        <div class="help">What materials cost you for the job.</div>
+                    </div>
+                    <div class="field">
+                        <label for="targetGp">Target GP %</label>
+                        <input id="targetGp" type="number" min="0" max="99.99" step="0.01" value="35" />
+                        <div class="help">This is the percentage of the sell price you want left after direct costs.
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="pricingMode">Costs entered as</label>
+                        <select id="pricingMode">
+                            <option value="ex" selected>Ex GST</option>
+                            <option value="inc">Inc GST</option>
+                        </select>
+                        <div class="help">Use ex GST if you are GST-registered and pricing normally.</div>
+                    </div>
+                </div>
+
+                <div class="grid-3" style="margin-top:16px;">
+                    <div class="field">
+                        <label for="materialsMarkupAssumption">Planned materials markup %</label>
+                        <input id="materialsMarkupAssumption" type="number" min="0" step="0.01" value="25" />
+                        <div class="help">Optional. Use this to work backwards to the labour markup required.</div>
+                    </div>
+                    <div class="field">
+                        <label for="gstRate">GST rate %</label>
+                        <input id="gstRate" type="number" min="0" step="0.01" value="15" />
+                        <div class="help">For NZ, this is usually 15%.</div>
+                    </div>
+                    <div class="field">
+                        <label for="formulaPreview">Pricing rule</label>
+                        <input id="formulaPreview" type="text" readonly value="Total cost ÷ (1 - Target GP %)" />
+                    </div>
+                </div>
+
+                <div class="step" style="margin-top:24px;">Step 2</div>
+                <h2>Recommended sell price</h2>
+                <div class="grid-4">
+                    <div class="result-box">
+                        <div class="result-label">Recommended sell price ex GST</div>
+                        <div class="result-value" id="recommendedExOut">$0.00</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-label">GST amount</div>
+                        <div class="result-value" id="gstOut">$0.00</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-label">Recommended sell price inc GST</div>
+                        <div class="result-value" id="recommendedIncOut">$0.00</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-label">Overall markup on total cost</div>
+                        <div class="result-value" id="overallMarkupOut">0.00%</div>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top:16px;">
+                    <div class="info-box">
+                        <h3>What this means</h3>
+                        <p><strong>Recommended sell price</strong> is the ex GST amount you need to charge to hit your
+                            target GP.</p>
+                        <p class="small">For a 35% GP target, divide your total cost by 0.65.</p>
+                        <div class="formula" id="formulaOut">Recommended sell price = Total cost ÷ (1 - Target GP %)
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <h3>Work backwards to markup</h3>
+                        <p><strong>Materials sell price</strong>: <span id="materialsSellInline">$0.00</span></p>
+                        <p><strong>Labour sell price needed</strong>: <span id="labourSellInline">$0.00</span></p>
+                        <p><strong>Required labour markup</strong>: <span id="requiredLabourMarkupInline">0.00%</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="action" id="useRecommendedBtn">Use recommended price in Check a Quote</button>
+                    <button class="action secondary" id="exampleRepairBtn">Example small repair</button>
+                    <button class="action secondary" id="exampleCylinderBtn">Example hot water job</button>
+                    <button class="action secondary" id="exampleBathroomBtn">Example bathroom quote</button>
+                    <button class="action secondary" id="clearBtn">Clear</button>
+                </div>
+            </div>
+
+            <div id="check-tab" class="tab-panel">
+                <div class="step">Step 3</div>
+                <h2>Check whether your quote hits target</h2>
+                <div class="grid-3">
+                    <div class="field">
+                        <label for="actualQuote">What you want to charge ex GST ($)</label>
+                        <div class="help">Enter your actual quote to see whether it hits the target GP.</div>
+                        <input id="actualQuote" type="number" min="0" step="0.01" value="1000" />
+                    </div>
+                    <div class="field">
+                        <label for="actualQuoteInc">What you want to charge inc GST ($)</label>
+                        <div class="help">This updates automatically from your ex GST quote.</div>
+                        <input id="actualQuoteInc" type="text" value="" readonly />
+                    </div>
+                    <div class="field">
+                        <label for="differenceToTarget">Difference to recommended price</label>
+                        <div class="help">Positive means above target. Negative means below target.</div>
+                        <input id="differenceToTarget" type="text" value="" readonly />
+                    </div>
+                </div>
+
+                <div class="grid-4" style="margin-top:16px;">
+                    <div class="result-box">
+                        <div class="result-label">Actual gross profit $</div>
+                        <div class="result-value" id="gpDollarHeader">$0.00</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-label">Actual GP % / margin</div>
+                        <div class="result-value" id="gpPercentHeader">0.00%</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-label">Actual markup %</div>
+                        <div class="result-value" id="markupPercentHeader">0.00%</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-label">Total job cost ex GST</div>
+                        <div class="result-value" id="totalCostHeader">$0.00</div>
+                    </div>
+                </div>
+
+                <div id="statusBox" class="status warn">Enter your job costs and target GP to see whether your quote is
+                    above or below target.</div>
+
+                <div class="progress-wrap">
+                    <div class="small" style="margin-bottom:8px;">Visual split of your actual quote</div>
+                    <div class="progress-bar">
+                        <div class="cost-bar" id="costBar" style="width:65%;">Costs</div>
+                        <div class="gp-bar" id="gpBar" style="width:35%;">Gross Profit</div>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Measure</th>
+                            <th>Result</th>
+                            <th>What it means</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total job cost ex GST</td>
+                            <td id="totalCostExRow">$0.00</td>
+                            <td>Your labour and material costs added together.</td>
+                        </tr>
+                        <tr>
+                            <td>Total job cost inc GST</td>
+                            <td id="totalCostIncRow">$0.00</td>
+                            <td>If you entered costs inc GST, this shows that total. If you entered ex GST, GST is added
+                                for display.</td>
+                        </tr>
+                        <tr>
+                            <td>Actual gross profit $</td>
+                            <td id="gpDollarRow">$0.00</td>
+                            <td>The dollars left after direct labour and material costs.</td>
+                        </tr>
+                        <tr>
+                            <td>Actual GP % / margin</td>
+                            <td id="gpPercentRow">0.00%</td>
+                            <td>The percentage of the sell price left after direct costs.</td>
+                        </tr>
+                        <tr>
+                            <td>Actual markup %</td>
+                            <td id="markupPercentRow">0.00%</td>
+                            <td>The percentage added onto total cost.</td>
+                        </tr>
+                        <tr>
+                            <td>Required labour markup %</td>
+                            <td id="requiredLabourMarkupRow">0.00%</td>
+                            <td>Based on your planned materials markup and target GP.</td>
+                        </tr>
+                        <tr>
+                            <td>Materials sell price using planned markup</td>
+                            <td id="materialsSellRow">$0.00</td>
+                            <td>How much materials would sell for using your chosen materials markup.</td>
+                        </tr>
+                        <tr>
+                            <td>Labour sell price needed</td>
+                            <td id="labourSellRow">$0.00</td>
+                            <td>The labour revenue needed to still hit the overall target GP.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="learn-tab" class="tab-panel">
+                <div class="training-grid">
+                    <div>
+                        <div class="step">Training</div>
+                        <h2>Learn the difference</h2>
+                        <div class="grid-3">
+                            <div class="info-box">
+                                <span class="pill">Gross Profit</span>
+                                <h3 style="margin-top:12px;">Money left after direct costs</h3>
+                                <p><strong>Gross Profit $</strong> = Sell price - Labour cost - Material cost</p>
+                                <p><strong>GP %</strong> = Gross Profit divided by the <strong>sell price</strong>.</p>
+                                <p class="small">This is the main number to target.</p>
+                            </div>
+                            <div class="info-box">
+                                <span class="pill">Margin</span>
+                                <h3 style="margin-top:12px;">Usually the same as GP %</h3>
+                                <p>In everyday business language, <strong>margin</strong> usually means the same thing
+                                    as <strong>Gross Profit %</strong>.</p>
+                                <p class="small">This is why people get confused. Many people use the words
+                                    interchangeably.</p>
+                            </div>
+                            <div class="info-box">
+                                <span class="pill">Markup</span>
+                                <h3 style="margin-top:12px;">What you add onto cost</h3>
+                                <p><strong>Markup %</strong> = Gross Profit divided by the <strong>cost</strong>.</p>
+                                <p class="small">Markup is based on cost. GP % is based on sell price. They are not the
+                                    same thing.</p>
+                            </div>
+                        </div>
+
+                        <details style="margin-top:16px;">
+                            <summary>Why 35% markup does not equal 35% GP</summary>
+                            <div style="margin-top:12px;">
+                                <p>If a job costs <strong>$100</strong> and you add a <strong>35% markup</strong>, your
+                                    sell price becomes <strong>$135</strong>.</p>
+                                <p>Your gross profit is <strong>$35</strong>, but your GP % is:</p>
+                                <div class="formula">$35 ÷ $135 = 25.93%</div>
+                                <p class="small" style="margin-bottom:0;">That is why markup and GP are different.</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div>
+                        <div class="info-box">
+                            <h3>Quick rules of thumb</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Target GP</th>
+                                        <th>Divide cost by</th>
+                                        <th>Equal markup on cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>30%</td>
+                                        <td>0.70</td>
+                                        <td>42.86%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>35%</td>
+                                        <td>0.65</td>
+                                        <td>53.85%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>40%</td>
+                                        <td>0.60</td>
+                                        <td>66.67%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>50%</td>
+                                        <td>0.50</td>
+                                        <td>100.00%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="info-box script" style="margin-top:16px;">
+                            <h3>Suggested member teaching script</h3>
+                            <p><strong>1.</strong> Start with total job cost.</p>
+                            <p><strong>2.</strong> Decide the target GP.</p>
+                            <p><strong>3.</strong> Divide cost by the GP remainder.</p>
+                            <p><strong>4.</strong> Add GST after the sell price is worked out.</p>
+                            <p><strong>5.</strong> Explain that markup is based on cost, while GP is based on sell
+                                price.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">Designed as a practical member education tool for pricing, quoting and understanding
+            GP, margin and markup.</div>
+    </div>
+
+    <script>
+        function getNumber(id) {
+            const value = parseFloat(document.getElementById(id).value);
+            return Number.isFinite(value) ? value : 0;
+        }
+
+        function formatMoney(value) {
+            return new Intl.NumberFormat('en-NZ', {
+                style: 'currency',
+                currency: 'NZD'
+            }).format(value || 0);
+        }
+
+        function formatPercent(value) {
+            return `${(value || 0).toFixed(2)}%`;
+        }
+
+        function setStatus(className, message) {
+            const box = document.getElementById('statusBox');
+            box.className = `status ${className}`;
+            box.textContent = message;
+        }
+
+        function updateProgress(costPercent, gpPercent) {
+            const safeCost = Math.max(0, Math.min(100, costPercent));
+            const safeGp = Math.max(0, Math.min(100, gpPercent));
+            const costBar = document.getElementById('costBar');
+            const gpBar = document.getElementById('gpBar');
+            costBar.style.width = `${safeCost}%`;
+            gpBar.style.width = `${safeGp}%`;
+            costBar.textContent = `Costs ${safeCost.toFixed(1)}%`;
+            gpBar.textContent = `GP ${safeGp.toFixed(1)}%`;
+        }
+
+        function calculate() {
+            const labourInput = getNumber('labourCost');
+            const materialsInput = getNumber('materialCost');
+            const pricingMode = document.getElementById('pricingMode').value;
+            const targetGp = getNumber('targetGp');
+            const gstRate = getNumber('gstRate');
+            const materialsMarkupAssumption = getNumber('materialsMarkupAssumption');
+            const actualQuoteEx = getNumber('actualQuote');
+
+            const gstFactor = 1 + (gstRate / 100);
+            const labourCostEx = pricingMode === 'inc' ? labourInput / gstFactor : labourInput;
+            const materialCostEx = pricingMode === 'inc' ? materialsInput / gstFactor : materialsInput;
+            const totalCostEx = labourCostEx + materialCostEx;
+            const totalCostInc = totalCostEx * gstFactor;
+
+            const recommendedSellEx = targetGp < 100 ? totalCostEx / (1 - targetGp / 100) : 0;
+            const gstAmount = recommendedSellEx * (gstRate / 100);
+            const recommendedSellInc = recommendedSellEx * gstFactor;
+            const overallMarkup = totalCostEx > 0 ? ((recommendedSellEx - totalCostEx) / totalCostEx) * 100 : 0;
+
+            const actualQuoteInc = actualQuoteEx * gstFactor;
+            const actualGpDollar = actualQuoteEx - totalCostEx;
+            const actualGpPercent = actualQuoteEx > 0 ? (actualGpDollar / actualQuoteEx) * 100 : 0;
+            const actualMarkupPercent = totalCostEx > 0 ? (actualGpDollar / totalCostEx) * 100 : 0;
+            const differenceToTarget = actualQuoteEx - recommendedSellEx;
+
+            const materialsSellEx = materialCostEx * (1 + materialsMarkupAssumption / 100);
+            const labourSellNeededEx = recommendedSellEx - materialsSellEx;
+            const requiredLabourMarkup = labourCostEx > 0 ? ((labourSellNeededEx - labourCostEx) / labourCostEx) * 100 : 0;
+
+            document.getElementById('recommendedExOut').textContent = formatMoney(recommendedSellEx);
+            document.getElementById('gstOut').textContent = formatMoney(gstAmount);
+            document.getElementById('recommendedIncOut').textContent = formatMoney(recommendedSellInc);
+            document.getElementById('overallMarkupOut').textContent = formatPercent(overallMarkup);
+            document.getElementById('actualQuoteInc').value = formatMoney(actualQuoteInc);
+            document.getElementById('differenceToTarget').value = `${differenceToTarget >= 0 ? '+' : ''}${formatMoney(differenceToTarget)}`;
+            document.getElementById('materialsSellInline').textContent = formatMoney(materialsSellEx);
+            document.getElementById('labourSellInline').textContent = formatMoney(labourSellNeededEx);
+            document.getElementById('requiredLabourMarkupInline').textContent = formatPercent(requiredLabourMarkup);
+
+            document.getElementById('totalCostHeader').textContent = formatMoney(totalCostEx);
+            document.getElementById('gpDollarHeader').textContent = formatMoney(actualGpDollar);
+            document.getElementById('gpPercentHeader').textContent = formatPercent(actualGpPercent);
+            document.getElementById('markupPercentHeader').textContent = formatPercent(actualMarkupPercent);
+
+            document.getElementById('totalCostExRow').textContent = formatMoney(totalCostEx);
+            document.getElementById('totalCostIncRow').textContent = formatMoney(totalCostInc);
+            document.getElementById('gpDollarRow').textContent = formatMoney(actualGpDollar);
+            document.getElementById('gpPercentRow').textContent = formatPercent(actualGpPercent);
+            document.getElementById('markupPercentRow').textContent = formatPercent(actualMarkupPercent);
+            document.getElementById('requiredLabourMarkupRow').textContent = formatPercent(requiredLabourMarkup);
+            document.getElementById('materialsSellRow').textContent = formatMoney(materialsSellEx);
+            document.getElementById('labourSellRow').textContent = formatMoney(labourSellNeededEx);
+
+            document.getElementById('formulaOut').textContent = `Recommended sell price = ${formatMoney(totalCostEx)} ÷ ${(1 - targetGp / 100).toFixed(2)}`;
+            document.getElementById('formulaPreview').value = `Divide total cost by ${(1 - targetGp / 100).toFixed(2)}`;
+
+            if (actualQuoteEx <= 0) {
+                setStatus('bad', 'Enter an actual quote ex GST to compare against your target GP.');
+            } else if (Math.abs(actualMarkupPercent - targetGp) < 0.15) {
+                setStatus('warn', 'Common mistake warning: markup % and GP % are different. Even if the numbers look similar, they are calculated from different bases.');
+            } else if (differenceToTarget >= 0) {
+                setStatus('good', `Your quote is meeting target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(actualGpPercent - targetGp).toFixed(2)}% above or equal to your ${targetGp.toFixed(2)}% target.`);
+            } else if (actualGpPercent >= targetGp - 5) {
+                setStatus('warn', `Your quote is slightly under target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(targetGp - actualGpPercent).toFixed(2)}% below your ${targetGp.toFixed(2)}% target.`);
+            } else {
+                setStatus('bad', `Your quote is under target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(targetGp - actualGpPercent).toFixed(2)}% below your ${targetGp.toFixed(2)}% target.`);
+            }
+
+            const costPercentOfSale = actualQuoteEx > 0 ? (totalCostEx / actualQuoteEx) * 100 : 0;
+            const gpPercentOfSale = actualQuoteEx > 0 ? (actualGpDollar / actualQuoteEx) * 100 : 0;
+            updateProgress(costPercentOfSale, gpPercentOfSale);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach((btn) => {
+                btn.classList.toggle('active', btn.dataset.tab === tabId);
+            });
+            document.querySelectorAll('.tab-panel').forEach((panel) => {
+                panel.classList.toggle('active', panel.id === tabId);
+            });
+        }
+
+        function useRecommendedPrice() {
+            const labourInput = getNumber('labourCost');
+            const materialsInput = getNumber('materialCost');
+            const pricingMode = document.getElementById('pricingMode').value;
+            const targetGp = getNumber('targetGp');
+            const gstRate = getNumber('gstRate');
+            const gstFactor = 1 + (gstRate / 100);
+            const labourCostEx = pricingMode === 'inc' ? labourInput / gstFactor : labourInput;
+            const materialCostEx = pricingMode === 'inc' ? materialsInput / gstFactor : materialsInput;
+            const totalCostEx = labourCostEx + materialCostEx;
+            const recommendedSellEx = targetGp < 100 ? totalCostEx / (1 - targetGp / 100) : 0;
+            document.getElementById('actualQuote').value = recommendedSellEx.toFixed(2);
+            calculate();
+            switchTab('check-tab');
+        }
+
+        function loadExample(type) {
+            if (type === 'repair') {
+                document.getElementById('labourCost').value = '180';
+                document.getElementById('materialCost').value = '65';
+                document.getElementById('targetGp').value = '35';
+                document.getElementById('materialsMarkupAssumption').value = '25';
+            } else if (type === 'cylinder') {
+                document.getElementById('labourCost').value = '850';
+                document.getElementById('materialCost').value = '1450';
+                document.getElementById('targetGp').value = '35';
+                document.getElementById('materialsMarkupAssumption').value = '20';
+            } else if (type === 'bathroom') {
+                document.getElementById('labourCost').value = '3200';
+                document.getElementById('materialCost').value = '2100';
+                document.getElementById('targetGp').value = '35';
+                document.getElementById('materialsMarkupAssumption').value = '25';
+            }
+            useRecommendedPrice();
+        }
+
+        function clearFields() {
+            document.getElementById('labourCost').value = '';
+            document.getElementById('materialCost').value = '';
+            document.getElementById('targetGp').value = '35';
+            document.getElementById('materialsMarkupAssumption').value = '25';
+            document.getElementById('gstRate').value = '15';
+            document.getElementById('actualQuote').value = '';
+            document.getElementById('pricingMode').value = 'ex';
+            calculate();
+            switchTab('price-tab');
+        }
+
+        ['labourCost', 'materialCost', 'targetGp', 'materialsMarkupAssumption', 'gstRate', 'actualQuote', 'pricingMode'].forEach((id) => {
+            document.getElementById(id).addEventListener('input', calculate);
+            document.getElementById(id).addEventListener('change', calculate);
+        });
+
+        document.querySelectorAll('.tab-btn').forEach((btn) => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        document.getElementById('useRecommendedBtn').addEventListener('click', useRecommendedPrice);
+        document.getElementById('exampleRepairBtn').addEventListener('click', () => loadExample('repair'));
+        document.getElementById('exampleCylinderBtn').addEventListener('click', () => loadExample('cylinder'));
+        document.getElementById('exampleBathroomBtn').addEventListener('click', () => loadExample('bathroom'));
+        document.getElementById('clearBtn').addEventListener('click', clearFields);
+
+        calculate();
+    </script>
+</body>
+
+</html>
