@@ -468,7 +468,7 @@
                     </div>
                     <div class="field">
                         <label for="targetGp">Target GP %</label>
-                        <input id="targetGp" type="number" min="0" max="99.99" step="0.01" value="35" />
+                        <input id="targetGp" type="number" min="0" max="99.99" step="0.01" value="30" />
                         <div class="help">This is the percentage of the sell price you want left after direct costs.
                         </div>
                     </div>
@@ -493,10 +493,7 @@
                         <input id="gstRate" type="number" min="0" step="0.01" value="15" />
                         <div class="help">For NZ, this is usually 15%.</div>
                     </div>
-                    <div class="field">
-                        <label for="formulaPreview">Pricing rule</label>
-                        <input id="formulaPreview" type="text" readonly value="Total cost ÷ (1 - Target GP %)" />
-                    </div>
+                    
                 </div>
 
                 <div class="step" style="margin-top:24px;">Step 2</div>
@@ -525,7 +522,7 @@
                         <h3>What this means</h3>
                         <p><strong>Recommended sell price</strong> is the ex GST amount you need to charge to hit your
                             target GP.</p>
-                        <p class="small">For a 35% GP target, divide your total cost by 0.65.</p>
+                        <p class="small">For a 30% GP target, divide your total cost by 0.70.</p>
                         <div class="formula" id="formulaOut">Recommended sell price = Total cost ÷ (1 - Target GP %)
                         </div>
                     </div>
@@ -683,12 +680,12 @@
                         </div>
 
                         <details style="margin-top:16px;">
-                            <summary>Why 35% markup does not equal 35% GP</summary>
+                            <summary>Why 30% markup does not equal 30% GP</summary>
                             <div style="margin-top:12px;">
-                                <p>If a job costs <strong>$100</strong> and you add a <strong>35% markup</strong>, your
-                                    sell price becomes <strong>$135</strong>.</p>
-                                <p>Your gross profit is <strong>$35</strong>, but your GP % is:</p>
-                                <div class="formula">$35 ÷ $135 = 25.93%</div>
+                                <p>If a job costs <strong>$100</strong> and you add a <strong>30% markup</strong>, your
+                                    sell price becomes <strong>$130</strong>.</p>
+                                <p>Your gross profit is <strong>$30</strong>, but your GP % is:</p>
+                                <div class="formula">$30 ÷ $130 = 23.08%</div>
                                 <p class="small" style="margin-bottom:0;">That is why markup and GP are different.</p>
                             </div>
                         </details>
@@ -728,16 +725,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-
-                        <div class="info-box script" style="margin-top:16px;">
-                            <h3>Suggested member teaching script</h3>
-                            <p><strong>1.</strong> Start with total job cost.</p>
-                            <p><strong>2.</strong> Decide the target GP.</p>
-                            <p><strong>3.</strong> Divide cost by the GP remainder.</p>
-                            <p><strong>4.</strong> Add GST after the sell price is worked out.</p>
-                            <p><strong>5.</strong> Explain that markup is based on cost, while GP is based on sell
-                                price.</p>
                         </div>
                     </div>
                 </div>
