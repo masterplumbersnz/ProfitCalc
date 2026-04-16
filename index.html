@@ -236,6 +236,11 @@
             color: var(--brand);
         }
 
+        #useRecommendedBtn.is-on {
+            opacity: 1;
+            outline: 2px solid currentColor;
+        }
+
         .result-box {
             display: flex;
             flex-direction: column;
@@ -255,7 +260,7 @@
             font-size: 30px;
             font-weight: 700;
             vertical-align: bottom;
-            align-self: bottom; 
+            align-self: bottom;
         }
 
         .status {
@@ -434,7 +439,8 @@
                     <div class="brand-badge">Master Plumbers NZ</div>
                     <h1>Gross Profit Pricing Calculator</h1>
                     <p>
-                        Use this to work out what to charge, check whether a quote hits your target gross profit, and help members understand the difference between gross profit, margin and markup.
+                        Use the three tabs below to work out what you should be charging, whether a quote hits your
+                        gross profit target, and learn the difference between gross profit, margin and markup.
                     </p>
                 </div>
                 <div class="small" style="color: rgba(255,255,255,0.85);">
@@ -449,10 +455,16 @@
                 <button class="tab-btn active" data-tab="price-tab">Price a Job</button>
                 <button class="tab-btn" data-tab="check-tab">Check a Quote</button>
                 <button class="tab-btn" data-tab="learn-tab">Learn the Difference</button>
+                <button class="action secondary" id="clearBtn">Clear</button>
             </div>
 
             <div id="price-tab" class="tab-panel active">
                 <div class="step">Step 1</div>
+                <div class="actions">
+                    <button class="action secondary" id="exampleRepairBtn">Example | Small Repair Job</button>
+                    <button class="action secondary" id="exampleCylinderBtn">Example | Hot Water Install</button>
+                    <button class="action secondary" id="exampleBathroomBtn">Example | Bathroom Quote</button>
+                </div>
                 <h2>Enter your job costs and target</h2>
                 <div class="grid-3">
                     <div class="field">
@@ -492,7 +504,7 @@
                         <input id="gstRate" type="number" min="0" step="0.01" value="15" />
                         <div class="help">For NZ, this is usually 15%.</div>
                     </div>
-                    
+
                 </div>
 
                 <div class="step" style="margin-top:24px;">Step 2</div>
@@ -534,18 +546,12 @@
                     </div>
                 </div>
 
-                <div class="actions">
-                    <button class="action" id="useRecommendedBtn">Use recommended price in Check a Quote</button>
-                    <button class="action secondary" id="exampleRepairBtn">Example small repair</button>
-                    <button class="action secondary" id="exampleCylinderBtn">Example hot water job</button>
-                    <button class="action secondary" id="exampleBathroomBtn">Example bathroom quote</button>
-                    <button class="action secondary" id="clearBtn">Clear</button>
-                </div>
+
             </div>
 
             <div id="check-tab" class="tab-panel">
                 <div class="step">Step 3</div>
-                <h2>Check whether your quote hits target</h2>
+                <h2>Check whether your quote hits target</h2><button class="action" id="useRecommendedBtn">Use recommended price</button>
                 <div class="grid-3">
                     <div class="field">
                         <label for="actualQuote">What you want to charge ex GST ($)</label>
@@ -751,6 +757,18 @@
             return `${(value || 0).toFixed(2)}%`;
         }
 
+        let useRecommended = false;
+        let lastManualQuote = '';
+
+        function updateRecommendedButton() {
+            const btn = document.getElementById('useRecommendedBtn');
+            btn.textContent = useRecommended
+                ? 'Use recommended price: ON'
+                : 'Use recommended price: OFF';
+
+            btn.classList.toggle('is-on', useRecommended);
+        }
+
         function setStatus(className, message) {
             const box = document.getElementById('statusBox');
             box.className = `status ${className}`;
@@ -775,7 +793,6 @@
             const targetGp = getNumber('targetGp');
             const gstRate = getNumber('gstRate');
             const materialsMarkupAssumption = getNumber('materialsMarkupAssumption');
-            const actualQuoteEx = getNumber('actualQuote');
 
             const gstFactor = 1 + (gstRate / 100);
             const labourCostEx = pricingMode === 'inc' ? labourInput / gstFactor : labourInput;
@@ -788,6 +805,11 @@
             const recommendedSellInc = recommendedSellEx * gstFactor;
             const overallMarkup = totalCostEx > 0 ? ((recommendedSellEx - totalCostEx) / totalCostEx) * 100 : 0;
 
+            if (useRecommended) {
+                document.getElementById('actualQuote').value = recommendedSellEx.toFixed(2);
+            }
+
+            const actualQuoteEx = getNumber('actualQuote');
             const actualQuoteInc = actualQuoteEx * gstFactor;
             const actualGpDollar = actualQuoteEx - totalCostEx;
             const actualGpPercent = actualQuoteEx > 0 ? (actualGpDollar / actualQuoteEx) * 100 : 0;
@@ -822,24 +844,34 @@
             document.getElementById('materialsSellRow').textContent = formatMoney(materialsSellEx);
             document.getElementById('labourSellRow').textContent = formatMoney(labourSellNeededEx);
 
-            document.getElementById('formulaOut').textContent = `Recommended sell price = ${formatMoney(totalCostEx)} ÷ ${(1 - targetGp / 100).toFixed(2)}`;
-            document.getElementById('formulaPreview').value = `Divide total cost by ${(1 - targetGp / 100).toFixed(2)}`;
+            document.getElementById('formulaOut').textContent =
+                `Recommended sell price = ${formatMoney(totalCostEx)} ÷ ${(1 - targetGp / 100).toFixed(2)}`;
 
             if (actualQuoteEx <= 0) {
                 setStatus('bad', 'Enter an actual quote ex GST to compare against your target GP.');
             } else if (Math.abs(actualMarkupPercent - targetGp) < 0.15) {
                 setStatus('warn', 'Common mistake warning: markup % and GP % are different. Even if the numbers look similar, they are calculated from different bases.');
             } else if (differenceToTarget >= 0) {
-                setStatus('good', `Your quote is meeting target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(actualGpPercent - targetGp).toFixed(2)}% above or equal to your ${targetGp.toFixed(2)}% target.`);
+                setStatus(
+                    'good',
+                    `Your quote is meeting target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(actualGpPercent - targetGp).toFixed(2)}% above or equal to your ${targetGp.toFixed(2)}% target.`
+                );
             } else if (actualGpPercent >= targetGp - 5) {
-                setStatus('warn', `Your quote is slightly under target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(targetGp - actualGpPercent).toFixed(2)}% below your ${targetGp.toFixed(2)}% target.`);
+                setStatus(
+                    'warn',
+                    `Your quote is slightly under target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(targetGp - actualGpPercent).toFixed(2)}% below your ${targetGp.toFixed(2)}% target.`
+                );
             } else {
-                setStatus('bad', `Your quote is under target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(targetGp - actualGpPercent).toFixed(2)}% below your ${targetGp.toFixed(2)}% target.`);
+                setStatus(
+                    'bad',
+                    `Your quote is under target. Actual GP is ${actualGpPercent.toFixed(2)}%, which is ${(targetGp - actualGpPercent).toFixed(2)}% below your ${targetGp.toFixed(2)}% target.`
+                );
             }
 
             const costPercentOfSale = actualQuoteEx > 0 ? (totalCostEx / actualQuoteEx) * 100 : 0;
             const gpPercentOfSale = actualQuoteEx > 0 ? (actualGpDollar / actualQuoteEx) * 100 : 0;
             updateProgress(costPercentOfSale, gpPercentOfSale);
+            updateRecommendedButton();
         }
 
         function switchTab(tabId) {
@@ -851,20 +883,19 @@
             });
         }
 
-        function useRecommendedPrice() {
-            const labourInput = getNumber('labourCost');
-            const materialsInput = getNumber('materialCost');
-            const pricingMode = document.getElementById('pricingMode').value;
-            const targetGp = getNumber('targetGp');
-            const gstRate = getNumber('gstRate');
-            const gstFactor = 1 + (gstRate / 100);
-            const labourCostEx = pricingMode === 'inc' ? labourInput / gstFactor : labourInput;
-            const materialCostEx = pricingMode === 'inc' ? materialsInput / gstFactor : materialsInput;
-            const totalCostEx = labourCostEx + materialCostEx;
-            const recommendedSellEx = targetGp < 100 ? totalCostEx / (1 - targetGp / 100) : 0;
-            document.getElementById('actualQuote').value = recommendedSellEx.toFixed(2);
-            calculate();
-            switchTab('check-tab');
+        function toggleRecommendedPrice() {
+            const actualQuoteInput = document.getElementById('actualQuote');
+
+            if (!useRecommended) {
+                lastManualQuote = actualQuoteInput.value;
+                useRecommended = true;
+                calculate();
+                switchTab('check-tab');
+            } else {
+                useRecommended = false;
+                actualQuoteInput.value = lastManualQuote;
+                calculate();
+            }
         }
 
         function loadExample(type) {
@@ -884,10 +915,15 @@
                 document.getElementById('targetGp').value = '30';
                 document.getElementById('materialsMarkupAssumption').value = '25';
             }
-            useRecommendedPrice();
+
+            useRecommended = true;
+            calculate();
+            switchTab('check-tab');
         }
 
         function clearFields() {
+            useRecommended = false;
+            lastManualQuote = '';
             document.getElementById('labourCost').value = '';
             document.getElementById('materialCost').value = '';
             document.getElementById('targetGp').value = '30';
@@ -899,16 +935,23 @@
             switchTab('price-tab');
         }
 
-        ['labourCost', 'materialCost', 'targetGp', 'materialsMarkupAssumption', 'gstRate', 'actualQuote', 'pricingMode'].forEach((id) => {
+        ['labourCost', 'materialCost', 'targetGp', 'materialsMarkupAssumption', 'gstRate', 'pricingMode'].forEach((id) => {
             document.getElementById(id).addEventListener('input', calculate);
             document.getElementById(id).addEventListener('change', calculate);
+        });
+
+        document.getElementById('actualQuote').addEventListener('input', () => {
+            if (useRecommended) {
+                useRecommended = false;
+            }
+            calculate();
         });
 
         document.querySelectorAll('.tab-btn').forEach((btn) => {
             btn.addEventListener('click', () => switchTab(btn.dataset.tab));
         });
 
-        document.getElementById('useRecommendedBtn').addEventListener('click', useRecommendedPrice);
+        document.getElementById('useRecommendedBtn').addEventListener('click', toggleRecommendedPrice);
         document.getElementById('exampleRepairBtn').addEventListener('click', () => loadExample('repair'));
         document.getElementById('exampleCylinderBtn').addEventListener('click', () => loadExample('cylinder'));
         document.getElementById('exampleBathroomBtn').addEventListener('click', () => loadExample('bathroom'));
