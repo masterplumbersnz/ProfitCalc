@@ -52,12 +52,44 @@
             margin-bottom: 20px;
         }
 
+
+
         .brand-row {
             display: flex;
             justify-content: space-between;
-            align-items: start;
+            align-items: flex-start;
             gap: 16px;
             flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: right;
+            gap: 12px;
+            margin-left: auto;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+        }
+
+        .brand-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .brand-logo {
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .brand-logo img {
+            display: block;
+            max-width: 100px;
+            height: auto;
         }
 
         .brand-badge {
@@ -72,7 +104,7 @@
         }
 
         h1 {
-            margin: 12px 0 10px;
+            margin: 0px 0 10px;
             font-size: 34px;
             line-height: 1.15;
         }
@@ -419,6 +451,32 @@
             }
         }
 
+        @media (max-width: 768px) {
+
+            .brand-logo img {
+                max-width: 60px;
+                /* shrink logo */
+                height: auto;
+                margin-left: 5px;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+                line-height: 1.2;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+                line-height: 1.5;
+            }
+
+            .hero .small {
+                font-size: 0.75rem;
+                font-style: italic;
+                margin-top: 5px;
+            }
+        }
+
         @media print {
             body {
                 padding: 0;
@@ -443,309 +501,315 @@
     <div class="wrap">
         <div class="hero">
             <div class="brand-row">
-                <div>
-                    <div class="brand-badge">Master Plumbers NZ</div>
+                <div class="brand-left">
                     <h1>Gross Profit Pricing Calculator</h1>
                     <p>
-                        Use the three tabs below to work out what you should be charging, whether a quote hits your
-                        gross profit target, and learn the difference between gross profit, margin and markup.
+                        Use the three tabs below to work out what you should be charging,
+                        whether a quote hits your gross profit target, and learn the difference
+                        between gross profit, margin and markup.
                     </p>
                 </div>
-                <div class="small" style="color: rgba(255,255,255,0.85);">
-                    Best used with ex GST costs and pricing. GST should usually be added after the sell price is worked
-                    out.
+
+                <div class="brand-logo">
+                    <img src="https://raw.githubusercontent.com/masterplumbersnz/ProfitCalc/refs/heads/main/logo.png">
                 </div>
+            </div>
+
+            <div class="small" style="color: rgba(255,255,255,0.85);">
+                Best used with ex GST costs and pricing. GST should usually be added after the sell price is worked out.
             </div>
         </div>
+    </div>
 
-        <div class="card">
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="price-tab">Price a Job</button>
-                <button class="tab-btn" data-tab="check-tab">Check a Quote</button>
-                <button class="tab-btn" data-tab="learn-tab">Learn the Difference</button>
-                <button class="action secondary" id="clearBtn">Clear</button>
+    <div class="card">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="price-tab">Price a Job</button>
+            <button class="tab-btn" data-tab="check-tab">Check a Quote</button>
+            <button class="tab-btn" data-tab="learn-tab">Learn the Difference</button>
+            <button class="action secondary" id="clearBtn">Clear</button>
+        </div>
+
+        <div id="price-tab" class="tab-panel active">
+            <div class="step">Step 1</div>
+            <div class="actions">
+                <button class="action secondary" id="exampleRepairBtn">Example | Small Repair Job</button>
+                <button class="action secondary" id="exampleCylinderBtn">Example | Hot Water Install</button>
+                <button class="action secondary" id="exampleBathroomBtn">Example | Bathroom Quote</button>
+            </div>
+            <h2>Enter your job costs and target</h2>
+            <div class="grid-3">
+                <div class="field">
+                    <label for="labourCost">Your labour cost ($)</label>
+                    <input id="labourCost" type="number" min="0" step="0.01" value="400" />
+                    <div class="help">Your true labour cost for the job, not what you want to charge.</div>
+                </div>
+                <div class="field">
+                    <label for="materialCost">Your material cost ($)</label>
+                    <input id="materialCost" type="number" min="0" step="0.01" value="250" />
+                    <div class="help">What materials cost you for the job.</div>
+                </div>
+                <div class="field">
+                    <label for="pricingMode">Costs entered as</label>
+                    <select id="pricingMode">
+                        <option value="ex" selected>Ex GST</option>
+                        <option value="inc">Inc GST</option>
+                    </select>
+                    <div class="help">Use ex GST if you are GST-registered and pricing normally.</div>
+                </div>
             </div>
 
-            <div id="price-tab" class="tab-panel active">
-                <div class="step">Step 1</div>
-                <div class="actions">
-                    <button class="action secondary" id="exampleRepairBtn">Example | Small Repair Job</button>
-                    <button class="action secondary" id="exampleCylinderBtn">Example | Hot Water Install</button>
-                    <button class="action secondary" id="exampleBathroomBtn">Example | Bathroom Quote</button>
-                </div>
-                <h2>Enter your job costs and target</h2>
-                <div class="grid-3">
-                    <div class="field">
-                        <label for="labourCost">Your labour cost ($)</label>
-                        <input id="labourCost" type="number" min="0" step="0.01" value="400" />
-                        <div class="help">Your true labour cost for the job, not what you want to charge.</div>
-                    </div>
-                    <div class="field">
-                        <label for="materialCost">Your material cost ($)</label>
-                        <input id="materialCost" type="number" min="0" step="0.01" value="250" />
-                        <div class="help">What materials cost you for the job.</div>
-                    </div>
-                    <div class="field">
-                        <label for="pricingMode">Costs entered as</label>
-                        <select id="pricingMode">
-                            <option value="ex" selected>Ex GST</option>
-                            <option value="inc">Inc GST</option>
-                        </select>
-                        <div class="help">Use ex GST if you are GST-registered and pricing normally.</div>
+            <div class="grid-3" style="margin-top:16px;">
+                <div class="field">
+                    <label for="targetGp">Target GP %</label>
+                    <input id="targetGp" type="number" min="0" max="99.99" step="0.01" value="30" />
+                    <div class="help">This is the percentage of the sell price you want left after direct costs.
                     </div>
                 </div>
-
-                <div class="grid-3" style="margin-top:16px;">
-                    <div class="field">
-                        <label for="targetGp">Target GP %</label>
-                        <input id="targetGp" type="number" min="0" max="99.99" step="0.01" value="30" />
-                        <div class="help">This is the percentage of the sell price you want left after direct costs.
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="materialsMarkupAssumption">Planned materials markup %</label>
-                        <input id="materialsMarkupAssumption" type="number" min="0" step="0.01" value="25" />
-                        <div class="help">Optional. Use this to work backwards to the labour markup required.</div>
-                    </div>
-                    <div class="field">
-                        <label for="gstRate">GST rate %</label>
-                        <input id="gstRate" type="number" min="0" step="0.01" value="15" />
-                        <div class="help">For NZ, this is usually 15%.</div>
-                    </div>
-
+                <div class="field">
+                    <label for="materialsMarkupAssumption">Planned materials markup %</label>
+                    <input id="materialsMarkupAssumption" type="number" min="0" step="0.01" value="25" />
+                    <div class="help">Optional. Use this to work backwards to the labour markup required.</div>
                 </div>
-
-                <div class="step" style="margin-top:24px;">Step 2</div>
-                <h2>Recommended sell price</h2>
-                <div class="grid-4">
-                    <div class="result-box">
-                        <div class="result-label">Recommended sell price ex GST</div>
-                        <div class="result-value" id="recommendedExOut">$0.00</div>
-                    </div>
-                    <div class="result-box">
-                        <div class="result-label">GST amount</div>
-                        <div class="result-value" id="gstOut">$0.00</div>
-                    </div>
-                    <div class="result-box">
-                        <div class="result-label">Recommended sell price inc GST</div>
-                        <div class="result-value" id="recommendedIncOut">$0.00</div>
-                    </div>
-                    <div class="result-box">
-                        <div class="result-label">Overall markup on total cost</div>
-                        <div class="result-value" id="overallMarkupOut">0.00%</div>
-                    </div>
+                <div class="field">
+                    <label for="gstRate">GST rate %</label>
+                    <input id="gstRate" type="number" min="0" step="0.01" value="15" />
+                    <div class="help">For NZ, this is usually 15%.</div>
                 </div>
-
-                <div class="grid-2" style="margin-top:16px;">
-                    <div class="info-box">
-                        <h3>What this means</h3>
-                        <p><strong>Recommended sell price</strong> is the ex GST amount you need to charge to hit your
-                            target GP.</p>
-                        <p class="small">For a 30% GP target, divide your total cost by 0.70.</p>
-                        <div class="formula" id="formulaOut">Recommended sell price = Total cost ÷ (1 - Target GP %)
-                        </div>
-                    </div>
-                    <div class="info-box">
-                        <h3>Work backwards to markup</h3>
-                        <p><strong>Materials sell price</strong>: <span id="materialsSellInline">$0.00</span></p>
-                        <p><strong>Labour sell price needed</strong>: <span id="labourSellInline">$0.00</span></p>
-                        <p><strong>Required labour markup</strong>: <span id="requiredLabourMarkupInline">0.00%</span>
-                        </p>
-                    </div>
-                </div>
-
 
             </div>
 
-            <div id="check-tab" class="tab-panel">
-                <div class="step">Step 3</div>
-                <h2>Check whether your quote hits target</h2><button class="action" id="useRecommendedBtn">Use recommended price</button>
-                <div class="grid-3">
-                    <div class="field">
-                        <label for="actualQuote">What you want to charge ex GST ($)</label>
-                        <div class="help">Enter your actual quote to see whether it hits the target GP.</div>
-                        <input id="actualQuote" type="number" min="0" step="0.01" value="1000" />
-                    </div>
-                    <div class="field">
-                        <label for="actualQuoteInc">What you want to charge inc GST ($)</label>
-                        <div class="help">This updates automatically from your ex GST quote.</div>
-                        <input id="actualQuoteInc" type="text" value="" readonly />
-                    </div>
-                    <div class="field">
-                        <label for="differenceToTarget">Difference to recommended price</label>
-                        <div class="help">Positive means above target. Negative means below target.</div>
-                        <input id="differenceToTarget" type="text" value="" readonly />
-                    </div>
+            <div class="step" style="margin-top:24px;">Step 2</div>
+            <h2>Recommended sell price</h2>
+            <div class="grid-4">
+                <div class="result-box">
+                    <div class="result-label">Recommended sell price ex GST</div>
+                    <div class="result-value" id="recommendedExOut">$0.00</div>
                 </div>
-
-                <div class="grid-4" style="margin-top:16px;">
-                    <div class="result-box">
-                        <div class="result-label">Actual gross profit $</div>
-                        <div class="result-value" id="gpDollarHeader">$0.00</div>
-                    </div>
-                    <div class="result-box">
-                        <div class="result-label">Actual GP % / margin</div>
-                        <div class="result-value" id="gpPercentHeader">0.00%</div>
-                    </div>
-                    <div class="result-box">
-                        <div class="result-label">Actual markup %</div>
-                        <div class="result-value" id="markupPercentHeader">0.00%</div>
-                    </div>
-                    <div class="result-box">
-                        <div class="result-label">Total job cost ex GST</div>
-                        <div class="result-value" id="totalCostHeader">$0.00</div>
-                    </div>
+                <div class="result-box">
+                    <div class="result-label">GST amount</div>
+                    <div class="result-value" id="gstOut">$0.00</div>
                 </div>
-
-                <div id="statusBox" class="status warn">Enter your job costs and target GP to see whether your quote is
-                    above or below target.</div>
-
-                <div class="progress-wrap">
-                    <div class="small" style="margin-bottom:8px;">Visual split of your actual quote</div>
-                    <div class="progress-bar">
-                        <div class="cost-bar" id="costBar" style="width:65%;">Costs</div>
-                        <div class="gp-bar" id="gpBar" style="width:35%;">Gross Profit</div>
-                    </div>
+                <div class="result-box">
+                    <div class="result-label">Recommended sell price inc GST</div>
+                    <div class="result-value" id="recommendedIncOut">$0.00</div>
                 </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Measure</th>
-                            <th>Result</th>
-                            <th>What it means</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Total job cost ex GST</td>
-                            <td id="totalCostExRow">$0.00</td>
-                            <td>Your labour and material costs added together.</td>
-                        </tr>
-                        <tr>
-                            <td>Total job cost inc GST</td>
-                            <td id="totalCostIncRow">$0.00</td>
-                            <td>If you entered costs inc GST, this shows that total. If you entered ex GST, GST is added
-                                for display.</td>
-                        </tr>
-                        <tr>
-                            <td>Actual gross profit $</td>
-                            <td id="gpDollarRow">$0.00</td>
-                            <td>The dollars left after direct labour and material costs.</td>
-                        </tr>
-                        <tr>
-                            <td>Actual GP % / margin</td>
-                            <td id="gpPercentRow">0.00%</td>
-                            <td>The percentage of the sell price left after direct costs.</td>
-                        </tr>
-                        <tr>
-                            <td>Actual markup %</td>
-                            <td id="markupPercentRow">0.00%</td>
-                            <td>The percentage added onto total cost.</td>
-                        </tr>
-                        <tr>
-                            <td>Required labour markup %</td>
-                            <td id="requiredLabourMarkupRow">0.00%</td>
-                            <td>Based on your planned materials markup and target GP.</td>
-                        </tr>
-                        <tr>
-                            <td>Materials sell price using planned markup</td>
-                            <td id="materialsSellRow">$0.00</td>
-                            <td>How much materials would sell for using your chosen materials markup.</td>
-                        </tr>
-                        <tr>
-                            <td>Labour sell price needed</td>
-                            <td id="labourSellRow">$0.00</td>
-                            <td>The labour revenue needed to still hit the overall target GP.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="result-box">
+                    <div class="result-label">Overall markup on total cost</div>
+                    <div class="result-value" id="overallMarkupOut">0.00%</div>
+                </div>
             </div>
 
-            <div id="learn-tab" class="tab-panel">
-                <div class="training-grid">
-                    <div>
-                        <div class="step">Training</div>
-                        <h2>Learn the difference</h2>
-                        <div class="grid-3">
-                            <div class="info-box">
-                                <span class="pill">Gross Profit</span>
-                                <h3 style="margin-top:12px;">Money left after direct costs</h3>
-                                <p><strong>Gross Profit $</strong> = Sell price - Labour cost - Material cost</p>
-                                <p><strong>GP %</strong> = Gross Profit divided by the <strong>sell price</strong>.</p>
-                                <p class="small">This is the main number to target.</p>
-                            </div>
-                            <div class="info-box">
-                                <span class="pill">Margin</span>
-                                <h3 style="margin-top:12px;">Usually the same as GP %</h3>
-                                <p>In everyday business language, <strong>margin</strong> usually means the same thing
-                                    as <strong>Gross Profit %</strong>.</p>
-                                <p class="small">This is why people get confused. Many people use the words
-                                    interchangeably.</p>
-                            </div>
-                            <div class="info-box">
-                                <span class="pill">Markup</span>
-                                <h3 style="margin-top:12px;">What you add onto cost</h3>
-                                <p><strong>Markup %</strong> = Gross Profit divided by the <strong>cost</strong>.</p>
-                                <p class="small">Markup is based on cost. GP % is based on sell price. They are not the
-                                    same thing.</p>
-                            </div>
-                        </div>
-
-                        <details style="margin-top:16px;">
-                            <summary>Why 30% markup does not equal 30% GP</summary>
-                            <div style="margin-top:12px;">
-                                <p>If a job costs <strong>$100</strong> and you add a <strong>30% markup</strong>, your
-                                    sell price becomes <strong>$130</strong>.</p>
-                                <p>Your gross profit is <strong>$30</strong>, but your GP % is:</p>
-                                <div class="formula">$30 ÷ $130 = 23.08%</div>
-                                <p class="small" style="margin-bottom:0;">That is why markup and GP are different.</p>
-                            </div>
-                        </details>
+            <div class="grid-2" style="margin-top:16px;">
+                <div class="info-box">
+                    <h3>What this means</h3>
+                    <p><strong>Recommended sell price</strong> is the ex GST amount you need to charge to hit your
+                        target GP.</p>
+                    <p class="small">For a 30% GP target, divide your total cost by 0.70.</p>
+                    <div class="formula" id="formulaOut">Recommended sell price = Total cost ÷ (1 - Target GP %)
                     </div>
+                </div>
+                <div class="info-box">
+                    <h3>Work backwards to markup</h3>
+                    <p><strong>Materials sell price</strong>: <span id="materialsSellInline">$0.00</span></p>
+                    <p><strong>Labour sell price needed</strong>: <span id="labourSellInline">$0.00</span></p>
+                    <p><strong>Required labour markup</strong>: <span id="requiredLabourMarkupInline">0.00%</span>
+                    </p>
+                </div>
+            </div>
 
-                    <div>
+
+        </div>
+
+        <div id="check-tab" class="tab-panel">
+            <div class="step">Step 3</div>
+            <h2>Check whether your quote hits target</h2><button class="action" id="useRecommendedBtn">Use recommended
+                price</button>
+            <div class="grid-3">
+                <div class="field">
+                    <label for="actualQuote">What you want to charge ex GST ($)</label>
+                    <div class="help">Enter your actual quote to see whether it hits the target GP.</div>
+                    <input id="actualQuote" type="number" min="0" step="0.01" value="1000" />
+                </div>
+                <div class="field">
+                    <label for="actualQuoteInc">What you want to charge inc GST ($)</label>
+                    <div class="help">This updates automatically from your ex GST quote.</div>
+                    <input id="actualQuoteInc" type="text" value="" readonly />
+                </div>
+                <div class="field">
+                    <label for="differenceToTarget">Difference to recommended price</label>
+                    <div class="help">Positive means above target. Negative means below target.</div>
+                    <input id="differenceToTarget" type="text" value="" readonly />
+                </div>
+            </div>
+
+            <div class="grid-4" style="margin-top:16px;">
+                <div class="result-box">
+                    <div class="result-label">Actual gross profit $</div>
+                    <div class="result-value" id="gpDollarHeader">$0.00</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Actual GP % / margin</div>
+                    <div class="result-value" id="gpPercentHeader">0.00%</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Actual markup %</div>
+                    <div class="result-value" id="markupPercentHeader">0.00%</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Total job cost ex GST</div>
+                    <div class="result-value" id="totalCostHeader">$0.00</div>
+                </div>
+            </div>
+
+            <div id="statusBox" class="status warn">Enter your job costs and target GP to see whether your quote is
+                above or below target.</div>
+
+            <div class="progress-wrap">
+                <div class="small" style="margin-bottom:8px;">Visual split of your actual quote</div>
+                <div class="progress-bar">
+                    <div class="cost-bar" id="costBar" style="width:65%;">Costs</div>
+                    <div class="gp-bar" id="gpBar" style="width:35%;">Gross Profit</div>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Measure</th>
+                        <th>Result</th>
+                        <th>What it means</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total job cost ex GST</td>
+                        <td id="totalCostExRow">$0.00</td>
+                        <td>Your labour and material costs added together.</td>
+                    </tr>
+                    <tr>
+                        <td>Total job cost inc GST</td>
+                        <td id="totalCostIncRow">$0.00</td>
+                        <td>If you entered costs inc GST, this shows that total. If you entered ex GST, GST is added
+                            for display.</td>
+                    </tr>
+                    <tr>
+                        <td>Actual gross profit $</td>
+                        <td id="gpDollarRow">$0.00</td>
+                        <td>The dollars left after direct labour and material costs.</td>
+                    </tr>
+                    <tr>
+                        <td>Actual GP % / margin</td>
+                        <td id="gpPercentRow">0.00%</td>
+                        <td>The percentage of the sell price left after direct costs.</td>
+                    </tr>
+                    <tr>
+                        <td>Actual markup %</td>
+                        <td id="markupPercentRow">0.00%</td>
+                        <td>The percentage added onto total cost.</td>
+                    </tr>
+                    <tr>
+                        <td>Required labour markup %</td>
+                        <td id="requiredLabourMarkupRow">0.00%</td>
+                        <td>Based on your planned materials markup and target GP.</td>
+                    </tr>
+                    <tr>
+                        <td>Materials sell price using planned markup</td>
+                        <td id="materialsSellRow">$0.00</td>
+                        <td>How much materials would sell for using your chosen materials markup.</td>
+                    </tr>
+                    <tr>
+                        <td>Labour sell price needed</td>
+                        <td id="labourSellRow">$0.00</td>
+                        <td>The labour revenue needed to still hit the overall target GP.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="learn-tab" class="tab-panel">
+            <div class="training-grid">
+                <div>
+                    <div class="step">Training</div>
+                    <h2>Learn the difference</h2>
+                    <div class="grid-3">
                         <div class="info-box">
-                            <h3>Quick rules of thumb</h3>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Target GP</th>
-                                        <th>Divide cost by</th>
-                                        <th>Equal markup on cost</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>30%</td>
-                                        <td>0.70</td>
-                                        <td>42.86%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>35%</td>
-                                        <td>0.65</td>
-                                        <td>53.85%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>40%</td>
-                                        <td>0.60</td>
-                                        <td>66.67%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>50%</td>
-                                        <td>0.50</td>
-                                        <td>100.00%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <span class="pill">Gross Profit</span>
+                            <h3 style="margin-top:12px;">Money left after direct costs</h3>
+                            <p><strong>Gross Profit $</strong> = Sell price - Labour cost - Material cost</p>
+                            <p><strong>GP %</strong> = Gross Profit divided by the <strong>sell price</strong>.</p>
+                            <p class="small">This is the main number to target.</p>
                         </div>
+                        <div class="info-box">
+                            <span class="pill">Margin</span>
+                            <h3 style="margin-top:12px;">Usually the same as GP %</h3>
+                            <p>In everyday business language, <strong>margin</strong> usually means the same thing
+                                as <strong>Gross Profit %</strong>.</p>
+                            <p class="small">This is why people get confused. Many people use the words
+                                interchangeably.</p>
+                        </div>
+                        <div class="info-box">
+                            <span class="pill">Markup</span>
+                            <h3 style="margin-top:12px;">What you add onto cost</h3>
+                            <p><strong>Markup %</strong> = Gross Profit divided by the <strong>cost</strong>.</p>
+                            <p class="small">Markup is based on cost. GP % is based on sell price. They are not the
+                                same thing.</p>
+                        </div>
+                    </div>
+
+                    <details style="margin-top:16px;">
+                        <summary>Why 30% markup does not equal 30% GP</summary>
+                        <div style="margin-top:12px;">
+                            <p>If a job costs <strong>$100</strong> and you add a <strong>30% markup</strong>, your
+                                sell price becomes <strong>$130</strong>.</p>
+                            <p>Your gross profit is <strong>$30</strong>, but your GP % is:</p>
+                            <div class="formula">$30 ÷ $130 = 23.08%</div>
+                            <p class="small" style="margin-bottom:0;">That is why markup and GP are different.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div>
+                    <div class="info-box">
+                        <h3>Quick rules of thumb</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Target GP</th>
+                                    <th>Divide cost by</th>
+                                    <th>Equal markup on cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>30%</td>
+                                    <td>0.70</td>
+                                    <td>42.86%</td>
+                                </tr>
+                                <tr>
+                                    <td>35%</td>
+                                    <td>0.65</td>
+                                    <td>53.85%</td>
+                                </tr>
+                                <tr>
+                                    <td>40%</td>
+                                    <td>0.60</td>
+                                    <td>66.67%</td>
+                                </tr>
+                                <tr>
+                                    <td>50%</td>
+                                    <td>0.50</td>
+                                    <td>100.00%</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="footer-note">Designed as a practical member education tool for pricing, quoting and understanding
-            GP, margin and markup.</div>
+    <div class="footer-note">Designed as a practical member education tool for pricing, quoting and understanding
+        GP, margin and markup.</div>
     </div>
 
     <script>
@@ -926,7 +990,6 @@
 
             useRecommended = true;
             calculate();
-            switchTab('check-tab');
         }
 
         function clearFields() {
