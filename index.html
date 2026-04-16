@@ -7,22 +7,22 @@
     <title>Master Plumbers NZ Pricing Calculator</title>
     <style>
         :root {
-            --bg: #f5f7fb;
+            --bg: #d0e0e3;
             --card: #ffffff;
             --text: #1f2937;
             --muted: #6b7280;
             --border: #d1d5db;
-            --brand: #0f172a;
+            --brand: #00395d;
             --brand-soft: #e2e8f0;
-            --brand-accent: #1d4ed8;
+            --brand-accent: #5ac5cc;
             --good-bg: #dcfce7;
             --good-text: #166534;
             --warn-bg: #fef3c7;
             --warn-text: #92400e;
             --bad-bg: #fee2e2;
             --bad-text: #991b1b;
-            --blue-bg: #dbeafe;
-            --blue-text: #1d4ed8;
+            --blue-bg: #d0e0e3;
+            --blue-text: #00395d;
             --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
         }
 
@@ -44,7 +44,7 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            background: #00395d;
             color: white;
             border-radius: 22px;
             padding: 28px;
@@ -123,15 +123,15 @@
             color: var(--brand);
             padding: 12px 16px;
             border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
         }
 
         .tab-btn.active {
-            background: var(--brand);
-            color: white;
-            border-color: var(--brand);
+            background: #5ac5cc;
+            color: #00395d;
+            border: #5ac5cc
         }
 
         .tab-panel {
@@ -144,13 +144,13 @@
 
         .step {
             display: flex;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 700;
             letter-spacing: 0.04em;
             text-transform: uppercase;
-            color: var(--blue-text);
-            background: var(--blue-bg);
-            padding: 6px 10px;
+            color: #fff;
+            background: #00395d;
+            padding: 10px 10px;
             border-radius: 999px;
             margin-bottom: 12px;
         }
@@ -370,7 +370,7 @@
         }
 
         .formula {
-            font-family: "Courier New", monospace;
+            font-family: inherit, sans-serif, 'Courier New', Courier, monospace;
             background: #f8fafc;
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -432,13 +432,12 @@
             <div class="brand-row">
                 <div>
                     <div class="brand-badge">Master Plumbers NZ</div>
-                    <h1>Pricing Calculator and Training Tool</h1>
+                    <h1>Gross Profit Pricing Calculator</h1>
                     <p>
-                        Use this to work out what to charge, check whether a quote hits your target gross profit,
-                        and help members understand the difference between gross profit, margin and markup.
+                        Use this to work out what to charge, check whether a quote hits your target gross profit, and help members understand the difference between gross profit, margin and markup.
                     </p>
                 </div>
-                <div class="small" style="color: rgba(255,255,255,0.85); max-width: 260px;">
+                <div class="small" style="color: rgba(255,255,255,0.85);">
                     Best used with ex GST costs and pricing. GST should usually be added after the sell price is worked
                     out.
                 </div>
