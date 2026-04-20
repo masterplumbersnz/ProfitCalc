@@ -206,6 +206,22 @@
             grid-template-columns: repeat(4, minmax(0, 1fr));
         }
 
+        .overall-markup {
+            display: flex;
+            color: #fff;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            background: #00395d;
+        }
+
+        .markup-sub {
+            font-size: 13px;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
         .field {
             display: flexbox;
             flex-direction: column;
@@ -277,8 +293,10 @@
 
         #useRecommendedBtn {
             opacity: 1;
-            background-color: #e2e8f0;
+            background-color: #F4A6A6;
             color: #00395d;
+            outline: #00395d solid 2px;
+            margin-bottom: 5px;
         }
 
         .result-box {
@@ -566,9 +584,9 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label for="materialsMarkupAssumption">Planned materials markup %</label>
-                    <input id="materialsMarkupAssumption" type="number" min="0" step="0.01" value="25" />
-                    <div class="help">Optional. Use this to work backwards to the labour markup required.</div>
+                    <label for="materialsMarkupAssumption">Planned materials markup % (Optional)</label>
+                    <input id="materialsMarkupAssumption" type="number" min="0" step="0.01" />
+                    <div class="help">Optional. Enter your planned materials markup % if you know it.</div>
                 </div>
                 <div class="field">
                     <label for="gstRate">GST rate %</label>
@@ -593,8 +611,8 @@
                     <div class="result-label">Recommended sell price inc GST</div>
                     <div class="result-value" id="recommendedIncOut">$0.00</div>
                 </div>
-                <div class="result-box">
-                    <div class="result-label">Overall markup on total cost</div>
+                <div class="overall-markup">
+                    <div class="markup-sub">Overall markup on total cost</div>
                     <div class="result-value" id="overallMarkupOut">0.00%</div>
                 </div>
             </div>
